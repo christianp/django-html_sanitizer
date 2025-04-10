@@ -16,12 +16,11 @@ class sanitize(object):
 
     
     def __init__(self, tags=bleach.ALLOWED_TAGS,
-                 attributes=bleach.ALLOWED_ATTRIBUTES, styles=[], strip=False,
+                 attributes=bleach.ALLOWED_ATTRIBUTES, strip=False,
                  strip_comments=True):
         self.kwargs = {
             'tags': tags,
             'attributes': attributes,
-            'styles': styles,
             'strip': strip,
             'strip_comments': strip_comments,
         }

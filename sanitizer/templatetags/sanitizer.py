@@ -11,7 +11,6 @@ if sys.version_info[0] == 3:
 
 ALLOWED_TAGS = getattr(settings, 'SANITIZER_ALLOWED_TAGS', [])
 ALLOWED_ATTRIBUTES = getattr(settings, 'SANITIZER_ALLOWED_ATTRIBUTES', [])
-ALLOWED_STYLES = getattr(settings, 'SANITIZER_ALLOWED_STYLES', [])
 
 register = template.Library()
 
@@ -19,8 +18,8 @@ register = template.Library()
 @stringfilter
 def sanitize(value):
     '''
-    Sanitizes strings according to SANITIZER_ALLOWED_TAGS,
-    SANITIZER_ALLOWED_ATTRIBUTES and SANITIZER_ALLOWED_STYLES variables in
+    Sanitizes strings according to SANITIZER_ALLOWED_TAGS and
+    SANITIZER_ALLOWED_ATTRIBUTES variables in
     settings.
 
     Example usage:
@@ -32,7 +31,7 @@ def sanitize(value):
     if isinstance(value, basestring):
         value = bleach.clean(value, tags=ALLOWED_TAGS,
                              attributes=ALLOWED_ATTRIBUTES, 
-                             styles=ALLOWED_STYLES, strip=False)
+                             strip=False)
     return value
 
 register.filter('escape_html', sanitize)
@@ -41,8 +40,8 @@ register.filter('escape_html', sanitize)
 @stringfilter
 def strip_filter(value):
     '''
-    Strips HTML tags from strings according to SANITIZER_ALLOWED_TAGS,
-    SANITIZER_ALLOWED_ATTRIBUTES and SANITIZER_ALLOWED_STYLES variables in
+    Strips HTML tags from strings according to SANITIZER_ALLOWED_TAGS
+    and SANITIZER_ALLOWED_ATTRIBUTES variables in
     settings.
 
     Example usage:
@@ -54,7 +53,7 @@ def strip_filter(value):
     if isinstance(value, basestring):
         value = bleach.clean(value, tags=ALLOWED_TAGS,
                              attributes=ALLOWED_ATTRIBUTES, 
-                             styles=ALLOWED_STYLES, strip=True)
+                             strip=True)
     return value
 
 register.filter('strip_html', strip_filter)
@@ -72,7 +71,6 @@ def sanitize_allow(value, args=''):
     if isinstance(value, basestring):
         allowed_tags = []
         allowed_attributes = []
-        allowed_styles = []
         
         args = args.strip().split(';')
         if len(args) > 0:
@@ -88,11 +86,10 @@ register.filter('sanitize_allow', sanitize_allow)
 
 
 @register.simple_tag
-def escape_html(value, allowed_tags=[], allowed_attributes=[],
-                allowed_styles=[]):
+def escape_html(value, allowed_tags=[], allowed_attributes=[]):
     """
     Template tag to sanitize string values. It accepts lists of
-    allowed tags, attributes or styles in comma separated string or list format.
+    allowed tags or attributes in comma separated string or list format.
 
     For example:
 
@@ -111,16 +108,15 @@ def escape_html(value, allowed_tags=[], allowed_attributes=[],
     if isinstance(value, basestring):
         value = bleach.clean(value, tags=allowed_tags,
                              attributes=allowed_attributes, 
-                             styles=allowed_styles, strip=False)
+                             strip=False)
     return value
 
 
 @register.simple_tag
-def strip_html(value, allowed_tags=[], allowed_attributes=[],
-               allowed_styles=[]):
+def strip_html(value, allowed_tags=[], allowed_attributes=[]):
     """
     Template tag to strip html from string values. It accepts lists of
-    allowed tags, attributes or stylesin comma separated string or list format.
+    allowed tags or attributes in comma separated string or list format.
 
     For example:
 
@@ -139,5 +135,5 @@ def strip_html(value, allowed_tags=[], allowed_attributes=[],
     if isinstance(value, basestring):
         value = bleach.clean(value, tags=allowed_tags,
                              attributes=allowed_attributes, 
-                             styles=allowed_styles, strip=True)
+                             strip=True)
     return value
