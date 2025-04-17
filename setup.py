@@ -16,7 +16,7 @@ setup(
     long_description=open('README.rst').read(),
     zip_safe=False,
     include_package_data=True,
-    install_requires=['django', 'bleach~=6'],
+    install_requires=['django', 'bleach>=6'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
