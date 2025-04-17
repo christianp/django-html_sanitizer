@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='django-html_sanitizer',
-    version='0.1.5',
+    version='0.1.6',
     author='Selwin Ong',
     author_email='selwin.ong@gmail.com',
     packages=['sanitizer'],
