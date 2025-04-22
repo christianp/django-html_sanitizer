@@ -11,22 +11,21 @@ from .models import SanitizedCharField, SanitizedTextField
 
 ALLOWED_TAGS = ['a']
 ALLOWED_ATTRIBUTES = ['href', 'style']
-ALLOWED_STYLES = ['width']
 
 
 class TestingModel(models.Model):
     test_field = SanitizedCharField(max_length=255, allowed_tags=ALLOWED_TAGS, 
-        allowed_attributes=ALLOWED_ATTRIBUTES, allowed_styles=ALLOWED_STYLES)
+        allowed_attributes=ALLOWED_ATTRIBUTES)
 
 
 class TestingTextModel(models.Model):
     test_field = SanitizedTextField(allowed_tags=ALLOWED_TAGS, 
-        allowed_attributes=ALLOWED_ATTRIBUTES, allowed_styles=ALLOWED_STYLES)
+        allowed_attributes=ALLOWED_ATTRIBUTES)
 
 
 class TestForm(forms.Form):
     test_field = SanitizedFormField(allowed_tags=['a'], 
-    allowed_attributes=['href', 'style'], allowed_styles=['width'])
+    allowed_attributes=['href', 'style'])
 
 
 class SanitizerTest(TestCase):
@@ -70,17 +69,17 @@ class SanitizerTest(TestCase):
     def test_escape_html(self):
         html = '<a href="" class="" style="width: 200px; height: 400px">foo</a><em></em>'
         self.assertEqual(escape_html(html, allowed_tags='a', 
-            allowed_attributes='href,style', allowed_styles='width'),
+            allowed_attributes='href,style'),
             '<a href="" style="width: 200px;">foo</a>&lt;em&gt;&lt;/em&gt;')
         self.assertEqual(escape_html(html, allowed_tags=['a'], 
-            allowed_attributes=['href', 'style'], allowed_styles=['width']),
+            allowed_attributes=['href', 'style']),
             '<a href="" style="width: 200px;">foo</a>&lt;em&gt;&lt;/em&gt;')
     
     def test_strip_html(self):
         html = '<a href="" class="" style="width: 200px; height: 400px">foo</a><em></em>'
         self.assertEqual(strip_html(html, allowed_tags='a', 
-            allowed_attributes='href,style', allowed_styles='width'),
+            allowed_attributes='href,style'),
             '<a href="" style="width: 200px;">foo</a>')
         self.assertEqual(strip_html(html, allowed_tags=['a'], 
-            allowed_attributes=['href', 'style'], allowed_styles=['width']),
+            allowed_attributes=['href', 'style']),
             '<a href="" style="width: 200px;">foo</a>')
